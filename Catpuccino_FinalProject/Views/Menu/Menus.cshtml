@@ -7,6 +7,66 @@
 
 <link rel="stylesheet" href="~/css/menu.css" asp-append-version="true" />
 
+<style>
+    /* Checkout input style */
+    .checkout-input {
+        background: #F5F5FA !important;
+        border: 1.5px solid #E0E0EE !important;
+        border-radius: 10px !important;
+        padding: 12px 14px !important;
+        font-size: 15px;
+        color: #3a2a1a;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+        .checkout-input:focus {
+            border-color: #5C3A1E !important;
+            box-shadow: 0 0 0 3px rgba(92,58,30,0.08) !important;
+            background: #fff !important;
+            outline: none;
+        }
+
+        .checkout-input::placeholder {
+            color: #b0aab8;
+            font-size: 14px;
+        }
+
+    /* Card type selector */
+    .card-type-option {
+        border-color: #e0e0ee !important;
+        transition: border-color 0.2s, background 0.2s;
+        background: #fafafa;
+    }
+
+        .card-type-option.selected {
+            border-color: #5C3A1E !important;
+            background: #fdf8f4;
+        }
+
+    /* Inline validation errors */
+    .field-error {
+        display: none;
+        color: #D63031;
+        font-size: 12px;
+        margin-top: 5px;
+        font-weight: 500;
+        padding: 5px 10px;
+        background: #FFF0F0;
+        border-left: 3px solid #D63031;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .checkout-input.is-invalid {
+        border-color: #D63031 !important;
+        background: #FFF8F8 !important;
+        box-shadow: none !important;
+    }
+
+    .checkout-input.is-valid {
+        border-color: #00B894 !important;
+    }
+</style>
+
 <header class="menu-hero">
     <div class="container d-flex justify-content-between align-items-center">
         <h1 class="menu-title">Our Menu</h1>
@@ -121,7 +181,7 @@
     }
 </main>
 
-<!-- ORDER MODAL -->
+
 <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-content-custom shadow-lg">
@@ -202,6 +262,17 @@
                             <div class="pay-radio-dot" style="width:18px; height:18px; border-radius:50%; border:1.5px solid #ccc; flex-shrink:0;"></div>
                         </label>
 
+                        <!-- NEW: Card Payment Option -->
+                        <label class="payment-method-option d-flex align-items-center gap-3 p-3 rounded-4 border" style="cursor: pointer;">
+                            <input type="radio" name="paymentMethod" value="Card" class="d-none pay-radio" />
+                            <div style="background:#F0F4FF; color:#3B5BDB; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">💳</div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold text-brown">Card</div>
+                                <div class="text-muted small">Visa, Mastercard, PayPal</div>
+                            </div>
+                            <div class="pay-radio-dot" style="width:18px; height:18px; border-radius:50%; border:1.5px solid #ccc; flex-shrink:0;"></div>
+                        </label>
+
                     </div>
 
                     <button class="btn btn-place-order shadow-sm w-100 mb-2" id="proceedToDetailsBtn">Next →</button>
@@ -216,15 +287,18 @@
                         <p class="text-muted small fw-bold mb-3">MAYA DETAILS</p>
                         <div class="mb-3">
                             <label class="form-label text-brown fw-bold small">Account Name</label>
-                            <input type="text" class="form-control rounded-3" id="maya-account-name" placeholder="e.g. Juan Dela Cruz" />
+                            <input type="text" class="form-control checkout-input rounded-3" id="maya-account-name" placeholder="e.g. Juan Dela Cruz" />
+                            <div class="field-error" id="err-maya-account-name">⚠ Account name is required.</div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-brown fw-bold small">Maya Mobile Number</label>
-                            <input type="tel" class="form-control rounded-3" id="maya-mobile" placeholder="e.g. 09XXXXXXXXX" maxlength="11" />
+                            <input type="tel" class="form-control checkout-input rounded-3" id="maya-mobile" placeholder="e.g. 09XXXXXXXXX" maxlength="11" />
+                            <div class="field-error" id="err-maya-mobile">⚠ Enter a valid mobile number (e.g. 09XXXXXXXXX).</div>
                         </div>
                         <div class="mb-4">
                             <label class="form-label text-brown fw-bold small">Reference Number</label>
-                            <input type="text" class="form-control rounded-3" id="maya-ref" placeholder="e.g. 123456789012" maxlength="20" />
+                            <input type="text" class="form-control checkout-input rounded-3" id="maya-ref" placeholder="e.g. 123456789012" maxlength="20" />
+                            <div class="field-error" id="err-maya-ref">⚠ Reference number is required (digits only).</div>
                         </div>
                     </div>
 
@@ -233,15 +307,18 @@
                         <p class="text-muted small fw-bold mb-3">GCASH DETAILS</p>
                         <div class="mb-3">
                             <label class="form-label text-brown fw-bold small">Account Name</label>
-                            <input type="text" class="form-control rounded-3" id="gcash-account-name" placeholder="e.g. Juan Dela Cruz" />
+                            <input type="text" class="form-control checkout-input rounded-3" id="gcash-account-name" placeholder="e.g. Juan Dela Cruz" />
+                            <div class="field-error" id="err-gcash-account-name">⚠ Account name is required.</div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-brown fw-bold small">GCash Mobile Number</label>
-                            <input type="tel" class="form-control rounded-3" id="gcash-mobile" placeholder="e.g. 09XXXXXXXXX" maxlength="11" />
+                            <input type="tel" class="form-control checkout-input rounded-3" id="gcash-mobile" placeholder="e.g. 09XXXXXXXXX" maxlength="11" />
+                            <div class="field-error" id="err-gcash-mobile">⚠ Enter a valid mobile number (e.g. 09XXXXXXXXX).</div>
                         </div>
                         <div class="mb-4">
                             <label class="form-label text-brown fw-bold small">Reference Number</label>
-                            <input type="text" class="form-control rounded-3" id="gcash-ref" placeholder="e.g. 123456789012" maxlength="20" />
+                            <input type="text" class="form-control checkout-input rounded-3" id="gcash-ref" placeholder="e.g. 123456789012" maxlength="20" />
+                            <div class="field-error" id="err-gcash-ref">⚠ Reference number is required (digits only).</div>
                         </div>
                     </div>
 
@@ -250,11 +327,64 @@
                         <p class="text-muted small fw-bold mb-3">CASH PAYMENT</p>
                         <div class="mb-3">
                             <label class="form-label text-brown fw-bold small">Your Name</label>
-                            <input type="text" class="form-control rounded-3" id="cash-name" placeholder="e.g. Juan Dela Cruz" />
+                            <input type="text" class="form-control checkout-input rounded-3" id="cash-name" placeholder="e.g. Juan Dela Cruz" />
+                            <div class="field-error" id="err-cash-name">⚠ Your name is required.</div>
                         </div>
                         <div class="alert rounded-3 mb-4" style="background:#EAF3DE; border:1px solid #C0DD97;">
                             <div class="fw-bold text-brown small mb-1">📋 Instructions</div>
                             <div class="text-muted small">Please proceed to the cashier to complete your payment. Have the exact amount ready.</div>
+                        </div>
+                    </div>
+
+                    <!-- NEW: Card Details -->
+                    <div id="details-Card" class="payment-details-form" style="display:none;">
+                        <p class="text-muted small fw-bold mb-3">CARD DETAILS</p>
+
+                        <!-- Card Type Selector -->
+                        <div class="d-flex gap-2 mb-4">
+                            <label class="card-type-option d-flex align-items-center justify-content-center px-3 py-2 rounded-3 border" style="cursor:pointer; flex:1; gap:6px;">
+                                <input type="radio" name="cardType" value="Mastercard" class="d-none card-type-radio" checked />
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" style="height:24px;" alt="Mastercard" />
+                                <span class="small fw-bold text-muted"></span>
+                            </label>
+                            <label class="card-type-option d-flex align-items-center justify-content-center px-3 py-2 rounded-3 border" style="cursor:pointer; flex:1; gap:6px;">
+                                <input type="radio" name="cardType" value="Visa" class="d-none card-type-radio" />
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Visa_Inc._logo_%282021%E2%80%93present%29.svg/3840px-Visa_Inc._logo_%282021%E2%80%93present%29.svg.png" style="height:18px;" alt="Visa" />
+                                <span class="small fw-bold text-muted"></span>
+                            </label>
+                            <label class="card-type-option d-flex align-items-center justify-content-center px-3 py-2 rounded-3 border" style="cursor:pointer; flex:1; gap:6px;">
+                                <input type="radio" name="cardType" value="PayPal" class="d-none card-type-radio" />
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" style="height:20px;" alt="PayPal" />
+                                <span class="small fw-bold text-muted"></span>
+                            </label>
+                        </div>
+
+                        <!-- Cardholder Name -->
+                        <div class="mb-3">
+                            <label class="form-label text-brown fw-bold small">Cardholder Name</label>
+                            <input type="text" class="form-control checkout-input rounded-3" id="card-name" placeholder="e.g. Juan Dela Cruz" />
+                            <div class="field-error" id="err-card-name">⚠ Cardholder name is required.</div>
+                        </div>
+
+                        <!-- Card Number -->
+                        <div class="mb-3">
+                            <label class="form-label text-brown fw-bold small">Card Number</label>
+                            <input type="text" class="form-control checkout-input rounded-3" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19" />
+                            <div class="field-error" id="err-card-number">⚠ Enter a valid 16-digit card number.</div>
+                        </div>
+
+                        <!-- Expiry + CVC -->
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="flex-grow-1">
+                                <label class="form-label text-brown fw-bold small">Expiration Date</label>
+                                <input type="text" class="form-control checkout-input rounded-3" id="card-expiry" placeholder="MM/YY" maxlength="5" />
+                                <div class="field-error" id="err-card-expiry">⚠ Enter expiry as MM/YY.</div>
+                            </div>
+                            <div style="width: 120px;">
+                                <label class="form-label text-brown fw-bold small">CVC</label>
+                                <input type="text" class="form-control checkout-input rounded-3" id="card-cvc" placeholder="CVC" maxlength="4" />
+                                <div class="field-error" id="err-card-cvc">⚠ Enter a valid CVC (3–4 digits).</div>
+                            </div>
                         </div>
                     </div>
 
@@ -270,7 +400,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
-        // --- 1. PRODUCT MODAL LOGIC (Plus/Minus & Size Math) ---
+        
         document.querySelectorAll('.btn-qty').forEach(btn => {
             btn.addEventListener('click', function () {
                 const targetId = this.getAttribute('data-target');
@@ -312,7 +442,7 @@
         }
 
 
-        // --- 2. DYNAMIC CART LOGIC ---
+        
         let cart = [];
 
         document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
@@ -366,24 +496,24 @@
                 grandTotal += itemTotal;
 
                 html += `
-                        <div class="cart-item-card bg-white p-3 rounded-4 mb-3 shadow-sm">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <div>
-                                    <h5 class="mb-0 fw-bold text-brown">${item.name}</h5>
-                                    <small class="text-muted d-block mt-1">${item.size}</small>
+                            <div class="cart-item-card bg-white p-3 rounded-4 mb-3 shadow-sm">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <div>
+                                        <h5 class="mb-0 fw-bold text-brown">${item.name}</h5>
+                                        <small class="text-muted d-block mt-1">${item.size}</small>
+                                    </div>
+                                    <span class="fw-bold text-brown fs-5">P${itemTotal}</span>
                                 </div>
-                                <span class="fw-bold text-brown fs-5">P${itemTotal}</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <div class="d-flex align-items-center gap-3">
-                                    <button type="button" class="btn-circle cart-minus" data-index="${index}">-</button>
-                                    <span class="fw-bold text-brown fs-5">${item.qty}</span>
-                                    <button type="button" class="btn-circle cart-plus" data-index="${index}">+</button>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <button type="button" class="btn-circle cart-minus" data-index="${index}">-</button>
+                                        <span class="fw-bold text-brown fs-5">${item.qty}</span>
+                                        <button type="button" class="btn-circle cart-plus" data-index="${index}">+</button>
+                                    </div>
+                                    <button type="button" class="btn-remove-item text-danger fw-bold fs-3 border-0 bg-transparent" data-index="${index}">×</button>
                                 </div>
-                                <button type="button" class="btn-remove-item text-danger fw-bold fs-3 border-0 bg-transparent" data-index="${index}">×</button>
                             </div>
-                        </div>
-                    `;
+                        `;
             });
 
             container.innerHTML = html;
@@ -412,7 +542,7 @@
         });
 
 
-        // --- 3. PLACE ORDER → OPEN PAYMENT MODAL ---
+        
         const placeOrderBtn = document.querySelector('.btn-place-order');
         if (placeOrderBtn) {
             placeOrderBtn.addEventListener('click', function () {
@@ -469,7 +599,9 @@
         document.getElementById('proceedToDetailsBtn').addEventListener('click', function () {
             const selectedMethod = document.querySelector('.pay-radio:checked');
             if (!selectedMethod) {
-                alert("Please select a payment method.");
+                // Show a subtle inline nudge instead of alert
+                this.classList.add('shake');
+                setTimeout(() => this.classList.remove('shake'), 400);
                 return;
             }
 
@@ -482,12 +614,21 @@
                 input.value = '';
             });
 
+            // Reset card type selection to first option
+            const firstCardType = document.querySelector('.card-type-radio');
+            if (firstCardType) {
+                firstCardType.checked = true;
+                document.querySelectorAll('.card-type-option').forEach(l => l.classList.remove('selected'));
+                firstCardType.closest('label').classList.add('selected');
+            }
+
             showStep('enter-details');
         });
 
 
         // --- 6. BACK TO METHOD SELECTION ---
         document.getElementById('backToMethodBtn').addEventListener('click', function () {
+            clearAllErrors();
             showStep('select-method');
         });
 
@@ -502,12 +643,50 @@
 
 
         // --- 8. CONFIRM PAYMENT → VALIDATE & SUBMIT ---
+
+        // Helper: show/clear a field error
+        function setError(inputId, errorId, message) {
+            const input = document.getElementById(inputId);
+            const err = document.getElementById(errorId);
+            if (input) input.classList.add('is-invalid');
+            if (err) {
+                err.textContent = '⚠ ' + message;
+                err.style.display = 'block';
+            }
+        }
+
+        function clearError(inputId, errorId) {
+            const input = document.getElementById(inputId);
+            const err = document.getElementById(errorId);
+            if (input) { input.classList.remove('is-invalid'); input.classList.add('is-valid'); }
+            if (err) err.style.display = 'none';
+        }
+
+        function clearAllErrors() {
+            document.querySelectorAll('.field-error').forEach(e => e.style.display = 'none');
+            document.querySelectorAll('.checkout-input').forEach(i => {
+                i.classList.remove('is-invalid', 'is-valid');
+            });
+        }
+
+        // Clear errors when user starts typing
+        document.querySelectorAll('.checkout-input').forEach(input => {
+            input.addEventListener('input', function () {
+                this.classList.remove('is-invalid', 'is-valid');
+                const errorEl = this.closest('.mb-3, .mb-4, .flex-grow-1, div[style]')?.querySelector('.field-error');
+                if (errorEl) errorEl.style.display = 'none';
+            });
+        });
+
         document.getElementById('confirmPaymentBtn').addEventListener('click', function () {
             const selectedMethod = document.querySelector('.pay-radio:checked');
             if (!selectedMethod) return;
 
             const method = selectedMethod.value;
             let paymentDetails = {};
+            let hasError = false;
+
+            clearAllErrors();
 
             // Validate fields based on method
             if (method === 'Maya') {
@@ -515,14 +694,22 @@
                 const mobile = document.getElementById('maya-mobile').value.trim();
                 const ref = document.getElementById('maya-ref').value.trim();
 
-                if (!name || !mobile || !ref) {
-                    alert("Please fill in all Maya payment details.");
-                    return;
-                }
-                if (!/^09\d{9}$/.test(mobile)) {
-                    alert("Please enter a valid Maya mobile number (e.g. 09XXXXXXXXX).");
-                    return;
-                }
+                if (!name) {
+                    setError('maya-account-name', 'err-maya-account-name', 'Account name is required.');
+                    hasError = true;
+                } else { clearError('maya-account-name', 'err-maya-account-name'); }
+
+                if (!mobile || !/^09\d{9}$/.test(mobile)) {
+                    setError('maya-mobile', 'err-maya-mobile', !mobile ? 'Mobile number is required.' : 'Enter a valid number (e.g. 09XXXXXXXXX).');
+                    hasError = true;
+                } else { clearError('maya-mobile', 'err-maya-mobile'); }
+
+                if (!ref || !/^\d+$/.test(ref)) {
+                    setError('maya-ref', 'err-maya-ref', !ref ? 'Reference number is required.' : 'Reference number must contain digits only.');
+                    hasError = true;
+                } else { clearError('maya-ref', 'err-maya-ref'); }
+
+                if (hasError) return;
                 paymentDetails = { accountName: name, mobileNumber: mobile, referenceNumber: ref };
 
             } else if (method === 'GCash') {
@@ -530,23 +717,63 @@
                 const mobile = document.getElementById('gcash-mobile').value.trim();
                 const ref = document.getElementById('gcash-ref').value.trim();
 
-                if (!name || !mobile || !ref) {
-                    alert("Please fill in all GCash payment details.");
-                    return;
-                }
-                if (!/^09\d{9}$/.test(mobile)) {
-                    alert("Please enter a valid GCash mobile number (e.g. 09XXXXXXXXX).");
-                    return;
-                }
+                if (!name) {
+                    setError('gcash-account-name', 'err-gcash-account-name', 'Account name is required.');
+                    hasError = true;
+                } else { clearError('gcash-account-name', 'err-gcash-account-name'); }
+
+                if (!mobile || !/^09\d{9}$/.test(mobile)) {
+                    setError('gcash-mobile', 'err-gcash-mobile', !mobile ? 'Mobile number is required.' : 'Enter a valid number (e.g. 09XXXXXXXXX).');
+                    hasError = true;
+                } else { clearError('gcash-mobile', 'err-gcash-mobile'); }
+
+                if (!ref || !/^\d+$/.test(ref)) {
+                    setError('gcash-ref', 'err-gcash-ref', !ref ? 'Reference number is required.' : 'Reference number must contain digits only.');
+                    hasError = true;
+                } else { clearError('gcash-ref', 'err-gcash-ref'); }
+
+                if (hasError) return;
                 paymentDetails = { accountName: name, mobileNumber: mobile, referenceNumber: ref };
 
             } else if (method === 'Cash') {
                 const name = document.getElementById('cash-name').value.trim();
                 if (!name) {
-                    alert("Please enter your name.");
-                    return;
-                }
+                    setError('cash-name', 'err-cash-name', 'Your name is required.');
+                    hasError = true;
+                } else { clearError('cash-name', 'err-cash-name'); }
+
+                if (hasError) return;
                 paymentDetails = { customerName: name };
+
+            } else if (method === 'Card') {
+                const name = document.getElementById('card-name').value.trim();
+                const number = document.getElementById('card-number').value.trim().replace(/\s/g, '');
+                const expiry = document.getElementById('card-expiry').value.trim();
+                const cvc = document.getElementById('card-cvc').value.trim();
+
+                if (!name) {
+                    setError('card-name', 'err-card-name', 'Cardholder name is required.');
+                    hasError = true;
+                } else { clearError('card-name', 'err-card-name'); }
+
+                if (!number || !/^\d{16}$/.test(number)) {
+                    setError('card-number', 'err-card-number', !number ? 'Card number is required.' : 'Enter a valid 16-digit card number.');
+                    hasError = true;
+                } else { clearError('card-number', 'err-card-number'); }
+
+                if (!expiry || !/^\d{2}\/\d{2}$/.test(expiry)) {
+                    setError('card-expiry', 'err-card-expiry', !expiry ? 'Expiration date is required.' : 'Enter expiry as MM/YY.');
+                    hasError = true;
+                } else { clearError('card-expiry', 'err-card-expiry'); }
+
+                if (!cvc || !/^\d{3,4}$/.test(cvc)) {
+                    setError('card-cvc', 'err-card-cvc', !cvc ? 'CVC is required.' : 'Enter a valid CVC (3–4 digits).');
+                    hasError = true;
+                } else { clearError('card-cvc', 'err-card-cvc'); }
+
+                if (hasError) return;
+                const cardType = document.querySelector('.card-type-radio:checked')?.value || 'Card';
+                paymentDetails = { cardholderName: name, cardType: cardType, lastFour: number.slice(-4), expiry: expiry };
             }
 
             this.innerText = "Processing...";
@@ -616,5 +843,32 @@
         });
 
         searchInput.addEventListener('keyup', applyFilters);
+
+
+        // --- 10. CARD NUMBER AUTO-FORMATTING ---
+        document.getElementById('card-number')?.addEventListener('input', function () {
+            let v = this.value.replace(/\D/g, '').substring(0, 16);
+            this.value = v.replace(/(.{4})/g, '$1 ').trim();
+        });
+
+        // --- 11. EXPIRY AUTO-FORMAT MM/YY ---
+        document.getElementById('card-expiry')?.addEventListener('input', function () {
+            let v = this.value.replace(/\D/g, '').substring(0, 4);
+            if (v.length >= 3) v = v.substring(0, 2) + '/' + v.substring(2);
+            this.value = v;
+        });
+
+        // --- 12. CARD TYPE VISUAL SELECTION ---
+        document.querySelectorAll('.card-type-option').forEach(label => {
+            label.addEventListener('click', function () {
+                document.querySelectorAll('.card-type-option').forEach(l => l.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Set default selected state for first card type
+        const defaultCardType = document.querySelector('.card-type-option');
+        if (defaultCardType) defaultCardType.classList.add('selected');
+
     });
 </script>
