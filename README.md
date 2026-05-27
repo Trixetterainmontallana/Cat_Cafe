@@ -6,3 +6,7 @@ Trixette Rain A. Montallana,
 Jhon Rovic A. Ramos,
 Bridget Narte,
 John Armand Alvarez
+_____________________________________
+admin credentials:
+admin
+admin123
